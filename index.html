@@ -454,7 +454,7 @@
       $("btnModoDes").setAttribute("aria-pressed", nuevo === "des");
       $("etiquetaEntrada").textContent = nuevo === "enc" ? "Texto a encriptar" : "Texto encriptado";
       $("etiquetaSalida").textContent = nuevo === "enc" ? "Texto encriptado" : "Texto original";
-      $("entrada").placeholder = nuevo === "enc" ? "Escribe aquí, por ejemplo: Bebe" : "Pega aquí, por ejemplo: bxwtxlwt";
+      $("entrada").placeholder = nuevo === "enc" ? "Escribe aquí el texto a encriptar" : "Pega aquí, el texto a desencriptar";
       // Anonymous: tapado al encriptar, descubierto al desencriptar
       $("anon").dataset.estado = nuevo === "enc" ? "tapado" : "libre";
       $("anonSvg").setAttribute("aria-label", nuevo === "enc" ? "Anonymous tapándose los ojos" : "Anonymous con la cara descubierta");
