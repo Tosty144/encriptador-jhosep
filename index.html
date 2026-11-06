@@ -6,109 +6,97 @@
   <title>Encriptador de Jhosep</title>
   <style>
     :root {
-      --fondo: #eef2f7;
-      --tarjeta: #ffffff;
-      --texto: #14213d;
-      --suave: #5b6b84;
-      --borde: #cbd5e3;
-      --acento: #1d4ed8;
-      --acento-texto: #ffffff;
-      --error: #b42318;
-      --error-fondo: #fdecea;
-      --ok-fondo: #e8f0fe;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --fondo: #0e1625;
-        --tarjeta: #17223a;
-        --texto: #e8eefb;
-        --suave: #9fb0cc;
-        --borde: #2c3b5a;
-        --acento: #6c9bff;
-        --acento-texto: #0e1625;
-        --error: #ff9b91;
-        --error-fondo: #3a1c1c;
-        --ok-fondo: #1f2f52;
-      }
+      --fondo: #020a1a;
+      --tarjeta: rgba(6, 18, 38, 0.88);
+      --texto: #e6f7ff;
+      --suave: #8fb4c9;
+      --borde: #1d5a78;
+      --acento: #35e0e0;
+      --acento-texto: #021524;
+      --caja: rgba(2, 12, 28, 0.9);
+      --error: #ffb4ab;
+      --error-fondo: rgba(120, 20, 20, 0.45);
     }
     * { box-sizing: border-box; }
+    html, body { height: 100%; }
     body {
       margin: 0;
-      min-height: 100vh;
       background: var(--fondo);
       color: var(--texto);
       font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
       line-height: 1.5;
+    }
+
+    /* Fondo con candado, circuitos y binario */
+    .fondo { position: fixed; inset: 0; z-index: 0; }
+    .fondo svg { width: 100%; height: 100%; display: block; }
+
+    .pagina {
+      position: relative;
+      z-index: 1;
+      min-height: 100%;
       display: flex;
       justify-content: center;
-      padding: 24px 16px;
+      align-items: flex-start;
+      padding: 28px 16px 40px;
     }
     main { width: 100%; max-width: 640px; }
-    h1 { font-size: 1.9rem; margin: 0 0 4px; }
-    .sub { margin: 0 0 24px; color: var(--suave); }
-    .menu { display: flex; gap: 8px; margin-bottom: 16px; }
+    h1 {
+      font-size: 1.9rem;
+      margin: 0 0 4px;
+      text-shadow: 0 0 14px rgba(53, 224, 224, 0.55);
+    }
+    .sub { margin: 0 0 20px; color: var(--suave); }
+
+    .menu { display: flex; gap: 8px; margin-bottom: 14px; }
     .menu button {
       flex: 1;
-      padding: 12px;
+      padding: 11px;
       font-size: 1rem;
       font-weight: 600;
       border: 2px solid var(--acento);
-      background: transparent;
+      background: rgba(2, 12, 28, 0.7);
       color: var(--acento);
       border-radius: 8px;
       cursor: pointer;
     }
-    .menu button[aria-pressed="true"] { background: var(--acento); color: var(--acento-texto); }
+    .menu button[aria-pressed="true"] {
+      background: var(--acento);
+      color: var(--acento-texto);
+      box-shadow: 0 0 14px rgba(53, 224, 224, 0.5);
+    }
+
     .tarjeta {
       background: var(--tarjeta);
       border: 1px solid var(--borde);
       border-radius: 10px;
       padding: 20px;
+      backdrop-filter: blur(3px);
+      box-shadow: 0 0 28px rgba(53, 224, 224, 0.12);
     }
-    label { display: block; font-weight: 600; margin-bottom: 6px; }
-    textarea {
+    label, .rotulo { display: block; font-weight: 600; margin-bottom: 6px; }
+    .grupo + .grupo { margin-top: 16px; }
+
+    textarea, .caja {
       width: 100%;
-      min-height: 90px;
-      padding: 10px;
+      min-height: 96px;
+      padding: 10px 12px;
       font: inherit;
       color: var(--texto);
-      background: var(--fondo);
+      background: var(--caja);
       border: 1px solid var(--borde);
       border-radius: 8px;
-      resize: vertical;
     }
-    .acciones { display: flex; gap: 8px; margin-top: 12px; }
-    .acciones button {
-      padding: 10px 18px;
-      font-size: 1rem;
-      font-weight: 600;
-      border-radius: 8px;
-      cursor: pointer;
-    }
-    #btnProcesar { background: var(--acento); color: var(--acento-texto); border: 2px solid var(--acento); }
-    #btnLimpiar { background: transparent; color: var(--texto); border: 2px solid var(--borde); }
-    button:focus-visible, textarea:focus-visible { outline: 3px solid var(--acento); outline-offset: 2px; }
-    .error {
-      margin-top: 14px;
-      padding: 10px 12px;
-      background: var(--error-fondo);
-      color: var(--error);
-      border-radius: 8px;
-    }
-    .paso { margin-top: 16px; }
-    .paso h2 { font-size: 1rem; margin: 0 0 4px; }
-    .paso .desc { margin: 0 0 6px; color: var(--suave); font-size: 0.9rem; }
+    textarea { resize: vertical; }
     .caja {
-      padding: 10px 12px;
-      background: var(--ok-fondo);
-      border-radius: 8px;
       font-family: Consolas, "Courier New", monospace;
       word-break: break-all;
-      min-height: 42px;
     }
-    .copiar {
-      margin-top: 6px;
-      padding: 6px 12px;
+    .caja.vacia { color: var(--suave); font-family: inherit; }
+
+    .fila { display: flex; gap: 8px; margin-top: 8px; }
+    .chico {
+      padding: 6px 14px;
       font-size: 0.9rem;
       background: transparent;
       color: var(--acento);
@@ -116,48 +104,203 @@
       border-radius: 6px;
       cursor: pointer;
     }
+    .principal {
+      display: block;
+      width: 100%;
+      margin-top: 18px;
+      padding: 12px;
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--acento-texto);
+      background: var(--acento);
+      border: 2px solid var(--acento);
+      border-radius: 8px;
+      cursor: pointer;
+    }
+    button:focus-visible, textarea:focus-visible {
+      outline: 3px solid var(--acento);
+      outline-offset: 2px;
+    }
+
+    .error {
+      margin-top: 12px;
+      padding: 10px 12px;
+      background: var(--error-fondo);
+      color: var(--error);
+      border-radius: 8px;
+    }
+
+    .proceso { margin-top: 18px; padding-top: 6px; border-top: 1px solid var(--borde); }
+    .paso { margin-top: 12px; }
+    .paso h2 { font-size: 1rem; margin: 0 0 2px; }
+    .paso .desc { margin: 0 0 6px; color: var(--suave); font-size: 0.9rem; }
+    .paso .caja { min-height: 44px; }
+
     .oculto { display: none; }
-    footer { margin-top: 20px; color: var(--suave); font-size: 0.85rem; text-align: center; }
+    footer { margin-top: 18px; color: var(--suave); font-size: 0.85rem; text-align: center; }
   </style>
 </head>
 <body>
-  <main>
-    <h1>Encriptador de Jhosep</h1>
-    <p class="sub">Elige una opción, escribe el texto y mira cómo pasa por cada paso.</p>
+  <div class="fondo" aria-hidden="true">
+    <svg viewBox="0 0 1200 800" preserveAspectRatio="xMinYMid slice" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#020a1a"/>
+          <stop offset="0.55" stop-color="#04223f"/>
+          <stop offset="1" stop-color="#021022"/>
+        </linearGradient>
+        <radialGradient id="halo" cx="0.22" cy="0.5" r="0.45">
+          <stop offset="0" stop-color="#0f6d8f" stop-opacity="0.55"/>
+          <stop offset="1" stop-color="#0f6d8f" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="brillo" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="5" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+        <path id="hex" d="M-34 0 L-17 -29 L17 -29 L34 0 L17 29 L-17 29 Z"/>
+      </defs>
 
-    <div class="menu" role="group" aria-label="Menú principal">
-      <button id="btnModoEnc" type="button" aria-pressed="true">Encriptar</button>
-      <button id="btnModoDes" type="button" aria-pressed="false">Desencriptar</button>
-    </div>
+      <rect width="1200" height="800" fill="url(#bg)"/>
+      <rect width="1200" height="800" fill="url(#halo)"/>
 
-    <section class="tarjeta">
-      <label id="etiquetaEntrada" for="entrada">Texto a encriptar</label>
-      <textarea id="entrada" placeholder="Escribe aquí, por ejemplo: Bebe"></textarea>
+      <!-- Hexágonos -->
+      <g fill="none" stroke="#2aa7c9" stroke-width="1.6" opacity="0.38">
+        <use href="#hex" x="70" y="130"/>
+        <use href="#hex" x="130" y="95" transform="scale(1.3) translate(-30 -20)"/>
+        <use href="#hex" x="75" y="330"/>
+        <use href="#hex" x="150" y="620"/>
+        <use href="#hex" x="70" y="700"/>
+        <use href="#hex" x="420" y="150"/>
+        <use href="#hex" x="470" y="215"/>
+        <use href="#hex" x="470" y="660"/>
+        <use href="#hex" x="540" y="590"/>
+        <use href="#hex" x="440" y="420"/>
+      </g>
 
-      <div class="acciones">
-        <button id="btnProcesar" type="button">Encriptar</button>
-        <button id="btnLimpiar" type="button">Limpiar</button>
+      <!-- Circuitos izquierda -->
+      <g fill="none" stroke="#2aa7c9" stroke-width="1.6" opacity="0.45">
+        <path d="M0 60 H90 L130 100 H260 L300 60 H380"/>
+        <path d="M0 250 H60 L100 290 H200"/>
+        <path d="M0 470 H80 L120 510 H190"/>
+        <path d="M0 560 H110 L150 600"/>
+        <path d="M0 760 H200 L240 720 H380"/>
+        <path d="M380 60 V20"/>
+        <path d="M540 300 H470 L430 340"/>
+        <path d="M560 520 H500 L460 560"/>
+      </g>
+      <g fill="#35e0e0" opacity="0.55">
+        <circle cx="380" cy="60" r="4"/><circle cx="200" cy="290" r="4"/>
+        <circle cx="190" cy="510" r="4"/><circle cx="150" cy="600" r="4"/>
+        <circle cx="380" cy="720" r="4"/><circle cx="430" cy="340" r="4"/>
+        <circle cx="460" cy="560" r="4"/><circle cx="380" cy="20" r="4"/>
+      </g>
+
+      <!-- Circuitos y flechas derecha -->
+      <g fill="none" stroke="#2aa7c9" stroke-width="1.6" opacity="0.4">
+        <path d="M760 700 H900 L940 660 H1100 L1140 700 H1200"/>
+        <path d="M800 620 H880 L920 580 H1040"/>
+        <path d="M820 120 H960 L1000 160 H1200"/>
+        <path d="M900 60 H1010 L1050 100 H1200"/>
+        <path d="M1000 760 H1120 L1160 720 H1200"/>
+        <path d="M740 760 H860"/>
+      </g>
+      <g fill="#35e0e0" opacity="0.5">
+        <circle cx="1040" cy="580" r="4"/><circle cx="1100" cy="660" r="4"/>
+        <circle cx="880" cy="620" r="4"/><circle cx="960" cy="120" r="4"/>
+        <circle cx="1050" cy="100" r="4"/><circle cx="860" cy="760" r="4"/>
+      </g>
+      <g fill="none" stroke="#35e0e0" stroke-width="5" opacity="0.28" stroke-linejoin="round">
+        <path d="M900 250 L940 290 L900 330"/><path d="M940 250 L980 290 L940 330"/>
+        <path d="M980 250 L1020 290 L980 330"/><path d="M1020 250 L1060 290 L1020 330"/>
+        <path d="M1060 250 L1100 290 L1060 330"/>
+        <path d="M860 380 L900 420 L860 460"/><path d="M900 380 L940 420 L900 460"/>
+        <path d="M940 380 L980 420 L940 460"/><path d="M980 380 L1020 420 L980 460"/>
+      </g>
+      <g fill="#ff9a3c" opacity="0.8">
+        <circle cx="1080" cy="470" r="5"/><circle cx="1130" cy="500" r="4"/>
+        <circle cx="1020" cy="520" r="3"/>
+      </g>
+
+      <!-- Binario suelto -->
+      <g fill="#5fe0f0" opacity="0.22" font-family="Consolas, 'Courier New', monospace" font-size="15">
+        <text x="640" y="90">1001 0110 1010</text>
+        <text x="700" y="190">0101 1100</text>
+        <text x="620" y="240">110010 011</text>
+        <text x="860" y="520">1010 0011 1101</text>
+        <text x="1000" y="640">0110 1001</text>
+        <text x="760" y="340">101 1100 0101</text>
+        <text x="1060" y="200">0011 1010</text>
+        <text x="640" y="450">1100 0110</text>
+      </g>
+
+      <!-- Candado -->
+      <g filter="url(#brillo)">
+        <path d="M168 370 V290 A82 82 0 0 1 332 290 V370" fill="none" stroke="#35e0e0" stroke-width="12" stroke-linecap="round"/>
+        <path d="M200 370 V292 A50 50 0 0 1 300 292 V370" fill="none" stroke="#35e0e0" stroke-width="5" stroke-linecap="round" opacity="0.7"/>
+        <rect x="110" y="368" width="280" height="240" rx="38" fill="rgba(8,70,100,0.45)" stroke="#35e0e0" stroke-width="7"/>
+      </g>
+      <g fill="#5fe0f0" opacity="0.5" font-family="Consolas, 'Courier New', monospace" font-size="16">
+        <text x="135" y="405">0110 1001 1010</text>
+        <text x="135" y="432">1101 0010 0110</text>
+        <text x="135" y="459">1001 1100</text>
+        <text x="300" y="459">0101</text>
+        <text x="135" y="486">0011 1010</text>
+        <text x="300" y="486">1100</text>
+        <text x="135" y="560">1010 0110 0011</text>
+        <text x="135" y="587">0101 1001 1100</text>
+        <text x="320" y="560">101</text>
+      </g>
+      <circle cx="250" cy="480" r="27" fill="#020a1a"/>
+      <path d="M237 494 L263 494 L272 556 L228 556 Z" fill="#020a1a"/>
+    </svg>
+  </div>
+
+  <div class="pagina">
+    <main>
+      <h1>Encriptador de Jhosep</h1>
+      <p class="sub">Escribe tu texto y el resultado aparece al instante.</p>
+
+      <div class="menu" role="group" aria-label="Menú principal">
+        <button id="btnModoEnc" type="button" aria-pressed="true">Encriptar</button>
+        <button id="btnModoDes" type="button" aria-pressed="false">Desencriptar</button>
       </div>
 
-      <div id="error" class="error oculto" role="alert"></div>
-
-      <div id="resultados" class="oculto">
-        <div class="paso">
-          <h2 id="titulo1"></h2>
-          <p id="desc1" class="desc"></p>
-          <div id="salida1" class="caja"></div>
+      <section class="tarjeta">
+        <div class="grupo">
+          <label id="etiquetaEntrada" for="entrada">Texto a encriptar</label>
+          <textarea id="entrada" placeholder="Escribe aquí, por ejemplo: Bebe"></textarea>
         </div>
-        <div class="paso">
-          <h2 id="titulo2"></h2>
-          <p id="desc2" class="desc"></p>
-          <div id="salida2" class="caja"></div>
-          <button id="btnCopiar" class="copiar" type="button">Copiar resultado final</button>
-        </div>
-      </div>
-    </section>
 
-    <footer>Encriptador de Jhosep · Tabla de equivalencias fija</footer>
-  </main>
+        <div class="grupo">
+          <span id="etiquetaSalida" class="rotulo">Texto encriptado</span>
+          <div id="salida" class="caja vacia" aria-live="polite" aria-labelledby="etiquetaSalida"></div>
+          <div class="fila">
+            <button id="btnCopiar" class="chico" type="button">Copiar resultado</button>
+            <button id="btnLimpiar" class="chico" type="button">Limpiar</button>
+          </div>
+        </div>
+
+        <div id="error" class="error oculto" role="alert"></div>
+
+        <button id="btnProceso" class="principal" type="button" aria-expanded="false">Mostrar proceso</button>
+
+        <div id="proceso" class="proceso oculto">
+          <div class="paso">
+            <h2 id="titulo1"></h2>
+            <p id="desc1" class="desc"></p>
+            <div id="salida1" class="caja"></div>
+          </div>
+          <div class="paso">
+            <h2 id="titulo2"></h2>
+            <p id="desc2" class="desc"></p>
+            <div id="salida2" class="caja"></div>
+          </div>
+        </div>
+      </section>
+
+      <footer>Encriptador de Jhosep · Tabla de equivalencias fija</footer>
+    </main>
+  </div>
 
   <script>
     // ---------- TABLA FIJA PASO 1: carácter -> número de 2 dígitos ----------
@@ -234,42 +377,28 @@
 
     // ---------- Interfaz ----------
     let modo = "enc";
+    let ultimo = null;          // último resultado válido
+    let procesoVisible = false;
     const $ = id => document.getElementById(id);
+    const TEXTO_VACIO = "El resultado aparece aquí";
 
-    function cambiarModo(nuevo) {
-      modo = nuevo;
-      $("btnModoEnc").setAttribute("aria-pressed", nuevo === "enc");
-      $("btnModoDes").setAttribute("aria-pressed", nuevo === "des");
-      $("etiquetaEntrada").textContent = nuevo === "enc" ? "Texto a encriptar" : "Texto encriptado";
-      $("entrada").placeholder = nuevo === "enc" ? "Escribe aquí, por ejemplo: Bebe" : "Pega aquí, por ejemplo: bxwtxlwt";
-      $("btnProcesar").textContent = nuevo === "enc" ? "Encriptar" : "Desencriptar";
-      limpiar();
+    function pintarSalida(texto) {
+      const caja = $("salida");
+      if (texto) {
+        caja.textContent = texto;
+        caja.classList.remove("vacia");
+      } else {
+        caja.textContent = TEXTO_VACIO;
+        caja.classList.add("vacia");
+      }
     }
 
-    function limpiar() {
-      $("entrada").value = "";
-      $("error").classList.add("oculto");
-      $("resultados").classList.add("oculto");
-    }
-
-    function procesar() {
-      const texto = $("entrada").value;
-      $("error").classList.add("oculto");
-      $("resultados").classList.add("oculto");
-
-      if (texto.trim() === "") {
-        $("error").textContent = "Escribe un texto para continuar.";
-        $("error").classList.remove("oculto");
+    function pintarProceso() {
+      const panel = $("proceso");
+      if (!procesoVisible || !ultimo) {
+        panel.classList.add("oculto");
         return;
       }
-
-      const r = modo === "enc" ? encriptar(texto) : desencriptar(texto);
-      if (r.error) {
-        $("error").textContent = r.error;
-        $("error").classList.remove("oculto");
-        return;
-      }
-
       if (modo === "enc") {
         $("titulo1").textContent = "Paso 1: caracteres a números";
         $("desc1").textContent = "Cada carácter se cambia por su número de 2 dígitos.";
@@ -281,27 +410,76 @@
         $("titulo2").textContent = "Paso 2: números a caracteres (texto original)";
         $("desc2").textContent = "Los números se cortan de 2 en 2 y cada pareja vuelve a su carácter.";
       }
-      $("salida1").textContent = r.paso1;
-      $("salida2").textContent = r.paso2;
-      $("resultados").classList.remove("oculto");
+      $("salida1").textContent = ultimo.paso1;
+      $("salida2").textContent = ultimo.paso2;
+      panel.classList.remove("oculto");
+    }
+
+    function actualizar() {
+      const texto = $("entrada").value;
+      $("error").classList.add("oculto");
+      ultimo = null;
+
+      if (texto.trim() === "") {
+        pintarSalida("");
+        pintarProceso();
+        return;
+      }
+
+      const r = modo === "enc" ? encriptar(texto) : desencriptar(texto);
+      if (r.error) {
+        $("error").textContent = r.error;
+        $("error").classList.remove("oculto");
+        pintarSalida("");
+      } else {
+        ultimo = r;
+        pintarSalida(r.paso2);
+      }
+      pintarProceso();
+    }
+
+    function cambiarModo(nuevo) {
+      modo = nuevo;
+      $("btnModoEnc").setAttribute("aria-pressed", nuevo === "enc");
+      $("btnModoDes").setAttribute("aria-pressed", nuevo === "des");
+      $("etiquetaEntrada").textContent = nuevo === "enc" ? "Texto a encriptar" : "Texto encriptado";
+      $("etiquetaSalida").textContent = nuevo === "enc" ? "Texto encriptado" : "Texto original";
+      $("entrada").placeholder = nuevo === "enc" ? "Escribe aquí, por ejemplo: Bebe" : "Pega aquí, por ejemplo: bxwtxlwt";
+      $("btnCopiar").textContent = "Copiar resultado";
+      limpiar();
+    }
+
+    function limpiar() {
+      $("entrada").value = "";
+      actualizar();
+      $("entrada").focus();
+    }
+
+    function alternarProceso() {
+      procesoVisible = !procesoVisible;
+      $("btnProceso").textContent = procesoVisible ? "Ocultar proceso" : "Mostrar proceso";
+      $("btnProceso").setAttribute("aria-expanded", procesoVisible);
+      pintarProceso();
     }
 
     function copiar() {
-      const texto = $("salida2").textContent;
+      if (!ultimo) return;
       const aviso = () => {
         $("btnCopiar").textContent = "Copiado";
-        setTimeout(() => { $("btnCopiar").textContent = "Copiar resultado final"; }, 1500);
+        setTimeout(() => { $("btnCopiar").textContent = "Copiar resultado"; }, 1500);
       };
       if (navigator.clipboard) {
-        navigator.clipboard.writeText(texto).then(aviso).catch(() => {});
+        navigator.clipboard.writeText(ultimo.paso2).then(aviso).catch(() => {});
       }
     }
 
     $("btnModoEnc").addEventListener("click", () => cambiarModo("enc"));
     $("btnModoDes").addEventListener("click", () => cambiarModo("des"));
-    $("btnProcesar").addEventListener("click", procesar);
+    $("entrada").addEventListener("input", actualizar);
     $("btnLimpiar").addEventListener("click", limpiar);
+    $("btnProceso").addEventListener("click", alternarProceso);
     $("btnCopiar").addEventListener("click", copiar);
+    pintarSalida("");
   </script>
 </body>
 </html>
